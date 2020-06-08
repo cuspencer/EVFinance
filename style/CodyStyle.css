@@ -1,0 +1,217 @@
+@charset "ISO-8859-1";
+
+body{
+  margin:0;
+  padding:60px 0 0 40px;
+ }
+ div#header{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:60px;
+}
+ div#left-sidebar{
+  position:absolute;
+  top:60px;
+  bottom:40px;
+  left:0;
+  width:15%;
+  background-color:burlywood;
+ }
+ div#footer {
+  position: absolute;
+  bottom: 0;
+  left:0;
+  width: 100%;
+  overflow: hidden;
+  height: 40px;
+  text-align:center
+}
+div#maincontent {
+  position: absolute;
+  overflow:auto;
+  height:85%;
+  left:15%;
+  width:85%;
+ }
+ div#report-title{
+ clear:both;
+ text-align:center;
+ font-weight:bold;
+ width:100%;
+ }
+ 
+div#currency-bar{
+	clear:both;
+	float: right;
+	margin-right: 30px;
+	margin-top: 10px;
+	padding: 10px;
+	border-style:solid;
+	border-width:1px;
+	background-color:#f8f8f8;
+}
+div#currency-selector-bar{
+   	font-size: 14px;
+} 
+div#currency-editor-button{
+	float: left;
+	width: 40%;
+	margin: 15px;
+} 
+div#report-block{
+	clear: both;
+	margin:20px;
+}
+div#cash-flow-report{
+	padding: 5px;
+	margin: 5px;
+	float: left;
+   	width: 50%;
+   	background-color:#f8f8f8;
+   	font-size: 20px;
+   	border-style:solid;
+	border-width:1px;
+} 
+div#account-balances{
+	padding: 5px;
+	margin:5px;
+	float: left;
+   	width: 40%;
+   	background-color:#f8f8f8;
+   	font-size: 20px;
+   	font-weight:bold;
+   	border-style:solid;
+	border-width:1px;
+}
+div#cash-accounts{
+	margin: 5px;
+	font-size: 14px;
+	font-weight:normal;
+}
+div#bank-accounts{
+	margin: 5px;
+	font-size: 14px;
+	font-weight:normal;
+}
+.cf-super-node{
+	padding:5px;
+	font-weight: bold;
+	width:100%;
+	font-size: 16px;
+}
+.cf-parent-node{
+	font-weight: bold;
+	width:100%;
+	padding-left:30px;
+	font-size: 14px;
+}
+.cf-child-node{
+	width:100%;
+	padding-left:60px;
+	font-size: 12px;
+}
+.negative-balance-text{
+	color: red;
+}
+.category-name{
+	margin: 1px;
+	padding:2px;
+	float:left;
+	width:65%;
+}
+.category-total{
+	margin: 1px;
+	padding:2px;
+	float:left;
+	width:30%;
+}
+.account-name{
+	margin: 1px;
+	padding:2px;
+	float:left;
+	width:60%;
+}
+.account-balance{
+	margin: 1px;
+	padding:2px;
+	float:left;
+	width:35%;
+}
+.section-header{
+	font-weight: bold;
+	font-size:16px;
+	clear:both;
+	float:left;
+	width:100%;
+}
+div#total-cash{
+	font-weight: bold;
+	font-size: 16px;
+}
+.currency-symbol{
+	right: 8px;
+}
+.errMsg{
+	color: red;
+}
+.logoutLblPos{
+
+   position:fixed;
+   right:10px;
+   top:10px;
+}
+.searchResults{
+	border-style:outset;
+	border-width:1px;
+	display:none;
+}
+.livesearch-result:hover{
+	background-color: powderBlue;
+	font-weight: bold;
+}
+.input-euro {
+     position: relative;  
+}
+.input-euro.left input {
+     padding-left:18px;
+}
+.input-euro.right input {
+     padding-right:18px;
+     text-align:end; 
+}
+
+.input-euro:before {
+     position: absolute;
+     top: 0;
+     content:'\20AC';
+}
+.input-euro.left:before {
+     left: 5px;
+}
+.input-euro.right:before {
+     right: 5px;
+}
+.euro-symbol:before{
+ 	content:'\20AC';
+}
+.rightSide{
+	float:right;
+}
+
+.currInput{
+	max-width: 100px;
+}
+
+.exchangeRateDisplay{
+	margin: 3px;
+	max-width:300px;
+}
+.mediumModal{
+	max-width:400px;
+}
+.twoColumns{
+	float: left;
+  	width: 50%;
+}

@@ -1,0 +1,91 @@
+@charset "ISO-8859-1";
+
+body{
+  margin:0;
+  padding:60px 0 0 40px;
+ }
+ div#header{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:60px;
+}
+ div#left-sidebar{
+  position:absolute;
+  top:60px;
+  bottom:40px;
+  left:0;
+  width:15%;
+  background-color:burlywood;
+ }
+ div#footer {
+  position: absolute;
+  bottom: 0;
+  left:0;
+  width: 100%;
+  overflow: hidden;
+  height: 40px;
+  text-align:center
+}
+div#maincontent {
+  position: absolute;
+  overflow:auto;
+  height:80%;
+  left:15%;
+  width:85%;
+ }
+ * html body{
+  overflow:hidden;
+ } 
+ * html div#content{
+  height:100%;
+  overflow:auto;
+ }
+ 
+.negative-balance-text{
+	color: red;
+}
+.errMsg{
+	color: red;
+}
+.logoutLblPos{
+
+   position:fixed;
+   right:10px;
+   top:10px;
+}
+.searchResults{
+	border-style:outset;
+	border-width:1px;
+	display:none;
+}
+.livesearch-result:hover{
+	background-color: powderBlue;
+	font-weight: bold;
+}
+.input-euro {
+     position: relative;  
+}
+.input-euro.left input {
+     padding-left:18px;
+}
+.input-euro.right input {
+     padding-right:18px;
+     text-align:end; 
+}
+
+.input-euro:before {
+     position: absolute;
+     top: 0;
+     content:'\20AC';
+}
+.input-euro.left:before {
+     left: 5px;
+}
+.input-euro.right:before {
+     right: 5px;
+}
+.euro-symbol:before{
+ 	content:'\20AC';
+}
