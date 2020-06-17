@@ -241,7 +241,7 @@ echo "</form></div></div>";
 //SHOW REPORT TITLE
 echo "<div id=\"report-block\">";
 echo "<div id=\"report-title\">";
-echo "<h3>En Vivo Salamanca Report</h3>";  //populate this from DB? Session?
+echo "<h3>" . $_SESSION['sysName'] ."</h3>"; 
 if($reportType == "1"){
     echo "<h5>Annual Report " . $reportYear . "</h5>";
 }else{

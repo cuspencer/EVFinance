@@ -37,9 +37,7 @@ function findAcctNum($acctName){
 
 function addExternalAccountByName($acctName){
     
-    $currencyType = 1;
-    
-    $insert = "INSERT INTO accounts (acct_name, acct_type, acct_currency) VALUES (\"" . $acctName . "\", 3, " . $currencyType . ")";
+    $insert = "INSERT INTO accounts (acct_name, acct_type) VALUES (\"" . $acctName . "\", 3)";
     DBwrapper::DBupdate($insert);
     
     return findAcctNum($acctName);

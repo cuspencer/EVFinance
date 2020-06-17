@@ -21,6 +21,8 @@ class Account{
       $this->acct_id = $acct_id;
       $this->user_id = $user_id;
       $this->pageNum = $pageNum;
+      $this->currency_id = $_SESSION['currencyID'];
+      $this->currency_string = $_SESSION['currencyShort'];
       $this->setAccountInfo();
       $this->setRows();
       $this->setReceipts();
@@ -45,7 +47,7 @@ class Account{
   private function setAccountInfo(){
       
       //gather account info
-      $acct_info_stmt = "SELECT accounts.acct_name, accounts.acct_balance, accounts.acct_currency, acct_user_access.edit ". 
+      $acct_info_stmt = "SELECT accounts.acct_name, accounts.acct_balance, acct_user_access.edit ". 
       "FROM accounts INNER JOIN acct_user_access ON accounts.acct_id = acct_user_access.acct_id " .
       "WHERE accounts.acct_id=$this->acct_id AND acct_user_access.user_id=$this->user_id";
       
@@ -54,14 +56,6 @@ class Account{
       if(sizeof($results_array)>0){
         $this->acct_balance = $results_array[0]['acct_balance'];
         $this->acct_name = $results_array[0]['acct_name'];
-        $this->currency_id = $results_array[0]['acct_currency'];
-                  
-        //SET CURRENCY STRING
-        if ($this->currency_id == 1){
-            $this->currency_string = "EUR";
-        }else if ($this->currency_id == 2){
-            $this->currency_string = "USD";
-        }
                   
         if($results_array[0]['edit'] == 1){
             $this->canEdit = true;

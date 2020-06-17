@@ -26,9 +26,17 @@ function showLoginScreen($errMessage = ""){
     $strToReturn = $strToReturn . "<TR><TD>System</TD>";
     $strToReturn = $strToReturn . "<TD><SELECT required id=\"dbSystem\" name=\"dbSystem\">";
     
-    //populate from XML file?
-    //$strToReturn = $strToReturn . "<option value=\"\" selected disabled>Select a system...</option>";
-    $strToReturn = $strToReturn . "<option value=\"envivo_test\">En Vivo Test</option>";
+    
+    //populate options from XML file
+    $systems=simplexml_load_file("sysinfo.xml") or die("Error: Cannot create object");
+    
+    if($systems->count() > 1){
+        $strToReturn = $strToReturn . "<option value=\"\" selected disabled>Select a system...</option>";
+    }
+    foreach($systems->system as $s){
+        $sysname = $s->name;
+        $strToReturn = $strToReturn . "<option>$sysname</option>";
+    }
     
     $strToReturn = $strToReturn . "</SELECT></TD><TD/></TR>";
     $strToReturn = $strToReturn . "<TR><TD></TD><TD><INPUT type=\"submit\" value=\"Login\"/></TD><TD/></TR>";
@@ -49,40 +57,41 @@ function showWelcomeScreen(){
 }//end function showWelcomeScreen()
 
 
-//process form, set userID
-
 if (!isset($_SESSION['userID'])) {
     
     //process form
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["username"];
         $password = $_POST["password"];
-        $dbname = $_POST["dbSystem"];
+        $sysname = $_POST["dbSystem"];
         
-        //set DB to query
-        $_SESSION['dbname'] = $dbname;
+        //get DB info from XML
+        $xmlpathstring = "/systems/system[name = \"$sysname\"]";
+        $systems=simplexml_load_file("sysinfo.xml") or die("Error: Cannot create object");
+        $dbsys = $systems->xpath($xmlpathstring)[0];
+                
+        $_SESSION['dbname'] = (string)$dbsys->database;
+        $_SESSION['dblogin'] = (string)$dbsys->login;
+        $_SESSION['dbpassword'] = (string)$dbsys->password;
         
-        $query = "SELECT * FROM users INNER JOIN currencies ON users.default_currency=currencies.currency_id WHERE " . 
-        "email='$email' and password='$password'";
-        
-        $result = DBwrapper::DBselect($query);
-        $count = count($result);
-        
-        if ($count > 0){
+        $userQuery = "SELECT * FROM users WHERE email='$email' and password='$password'";
+        $result = DBwrapper::DBselect($userQuery);
+        if (count($result) > 0){
             $_SESSION['userID'] = $result[0]['user_id'];
             $_SESSION['fname'] = $result[0]['fname'];
             $_SESSION['lname'] = $result[0]['lname'];
             $_SESSION['email'] = $result[0]['email'];
             $_SESSION['userRole'] = $result[0]['user_role'];
             
-            //SET THESE VIA DB QUERY?
-            $_SESSION['currencyID'] = $result[0]['currency_id'];
-            $_SESSION['currencySymbol'] = $result[0]['symbol'];
-            $_SESSION['currencyShort'] = $result[0]['short'];
-            
+            //set system session variables
+            $currQuery = "SELECT * FROM sysinfo LEFT JOIN currencies ON sysinfo.sys_currency_id=currencies.currency_id";
+            $sysResult = DBwrapper::DBselect($currQuery);
+            $_SESSION['sysName'] = $sysResult[0]['sys_name'];
+            $_SESSION['currencyID'] = $sysResult[0]['currency_id'];
+            $_SESSION['currencySymbol'] = $sysResult[0]['symbol'];
+            $_SESSION['currencyShort'] = $sysResult[0]['short'];
             
             require 'left_nav.php';
-            //echo "<H3>LOGIN SUCCESSFUL!</H3><BR>";
             echo showWelcomeScreen();
         }
         else {

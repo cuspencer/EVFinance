@@ -6,14 +6,14 @@ class DBwrapper {
     private static $servername = "localhost";
     private static $username = "finance";
     private static $password = "EV_finance2020!";
-    //private static $dbname = "envivo_test";
     
     public static function DBupdate($update_stmt){
        
+            
         $servername = self::$servername;
         $dbname = $_SESSION['dbname'];
-        $username = self::$username;
-        $password = self::$password;
+        $username = $_SESSION['dblogin'];
+        $password = $_SESSION['dbpassword'];
         $success = false;
         
         try {
@@ -34,8 +34,8 @@ class DBwrapper {
     public static function DBselect($select_stmt){
         $servername = self::$servername;
         $dbname = $_SESSION['dbname'];
-        $username = self::$username;
-        $password = self::$password;
+        $username = $_SESSION['dblogin'];
+        $password = $_SESSION['dbpassword'];
         $results = array();
         
         try {

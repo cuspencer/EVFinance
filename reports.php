@@ -19,12 +19,6 @@ if($_SESSION['userRole'] == "3"){ //test this!
 
 <?php
 
-//USER GLOBALS
-//$userID = $_SESSION['userID'];
-//$userRole = $_SESSION['userRole'];
-
-
-
 //report type - monthly or annual, AJAX populate by earliest trans
 echo "<FORM ACTION=\"report-viewer.php\" METHOD=\"GET\">";
 echo "<DIV id=\"reportTypeChooser\" class=\"w3-container\">"; 
