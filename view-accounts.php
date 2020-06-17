@@ -33,7 +33,7 @@ if(sizeof($results_array)>0){
     echo "<select id=\"account\" name=\"account\">";
         
     foreach ($results_array as $r){
-        echo "<option value=" . $r['acct_id'] . ">" . utf8_encode($r['acct_name']) . "</option>";
+        echo "<option value=" . $r['acct_id'] . ">" . $r['acct_name'] . "</option>";
     }
         
     echo "</select>";

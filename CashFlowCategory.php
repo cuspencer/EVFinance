@@ -73,22 +73,20 @@ class CashFlowCategory{
         
         foreach ($transArray as $t){
             $cid = (int)$this->categoryID;
-            if($cid > 2000){
-                if($t['acct_payer'] < "9999"){
+            if($cid > 2000){ //outflows
+                if($t['acct_payer'] < "99"){
                     $total += $t['trans_amount'];
                 }else{
                     $total -= $t['trans_amount'];
                 }
-            }else {
-                if($t['acct_payer'] < "9999"){
+            }else { //inflows
+                if($t['acct_payer'] < "99"){
                     $total -= $t['trans_amount'];
                 }else{
                     $total += $t['trans_amount'];
                 }
-                
-            }
-            
-        }
+            }//end if-else
+        }//end foreach
         return $total;
     }//end function getMyCashFlow()
     

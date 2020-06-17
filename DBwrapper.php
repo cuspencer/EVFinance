@@ -17,7 +17,7 @@ class DBwrapper {
         $success = false;
         
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=UTF8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $conn->prepare($update_stmt);
             $success = $stmt->execute();
@@ -39,7 +39,7 @@ class DBwrapper {
         $results = array();
         
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=UTF8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $conn->prepare($select_stmt);
             $stmt->execute();

@@ -90,7 +90,7 @@ else{
         if($r['category_id'] == $receiptInfo['category_id']){
                echo " selected";
         }
-        echo ">" . utf8_encode($r['category_name']) . "</option>";
+        echo ">" . $r['category_name'] . "</option>";
     }
     echo "</td>";
 }
@@ -106,7 +106,7 @@ if($isTransfer){
         if(($r['acct_id'] == $receiptInfo['acct_payer']) || ($r['acct_id'] == $receiptInfo['acct_receiver'])){
             echo " selected";
         }
-        echo ">" . utf8_encode($r['acct_name']) . "</option>";
+        echo ">" . $r['acct_name'] . "</option>";
     }
     echo "</td>";
     echo "<input type=\"hidden\" id=\"rType\" name=\"rType\" value=\"3\"/>"; //transfer code
@@ -124,7 +124,7 @@ else{
 
 //DESCRIPTION
 echo "<td><INPUT type=\"text\" required id=\"tDescription\" name=\"tDescription\"/ value=\"" . 
-    utf8_encode($receiptInfo['description']) . "\"></td>";    
+    $receiptInfo['description'] . "\"></td>";    
     
 
 //AMOUNT 

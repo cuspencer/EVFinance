@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
 <link rel="stylesheet" href="style/w3.css"/>
 <link rel="stylesheet" href="style/CodyStyle.css"/>
 <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>

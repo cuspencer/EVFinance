@@ -22,10 +22,10 @@ class Receipt {
         $this->date = $date;
         $this->amount = $amount;
         $this->acct_num = $acct_num;
-        $this->acct_name = utf8_encode($acct_name);
+        $this->acct_name = $acct_name;
         $this->categoryID = $categoryID;
-        $this->category_name = utf8_encode($category_name);
-        $this->description = utf8_encode($description);
+        $this->category_name = $category_name;
+        $this->description = $description;
         $this->isCredit = $isCredit;
         $this->balance = $balance;
     }//end function (__construct)

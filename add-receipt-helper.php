@@ -13,7 +13,7 @@ $maxdate = date("Y-m-d");
 
 //Populate transfer_array and category_array
 function populateCategories(){
-    $category_stmt = "SELECT * from categories WHERE category_id < 9000";
+    $category_stmt = "SELECT * from categories WHERE category_id < 9000 AND category_type = 2";
     return DBwrapper::DBselect($category_stmt);
 }//end function populateCategories()
 
@@ -79,7 +79,7 @@ if ($t == 3){ //internal transfer
     
     //loop and add transfer options
     foreach ($transfer_array as $r){
-        echo "<option value=" . $r['acct_id'] . ">" . utf8_encode($r['acct_name']) . "</option>";
+        echo "<option value=" . $r['acct_id'] . ">" . $r['acct_name'] . "</option>";
     }
     echo "<input type=\"hidden\" id=\"tCategoryId\" name=\"tCategoryId\" value=\"9000\"/>";
     echo "</td>";
@@ -106,7 +106,7 @@ if ($t == 3){ //internal transfer
     echo "<option value=\"\" selected disabled>Select a category...</option>";
     //loop and add category options
     foreach ($category_array as $r){
-        echo "<option value=" . $r['category_id'] . ">" . utf8_encode($r['category_name']) . "</option>";
+        echo "<option value=" . $r['category_id'] . ">" . $r['category_name'] . "</option>";
     }
     echo "</td>";
     echo "<td><div id=\"catErrMsg\" name=\"catErrMsg\" class=\"errMsg\"></div></td></tr>";

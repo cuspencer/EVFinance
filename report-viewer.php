@@ -27,12 +27,17 @@ require 'AccountBalanceReport.php';
 <?php
 
 
+function format2dp($strToFormat){
+    return number_format((float)$strToFormat, 2, '.', '');
+}
+
 function printCashFlowObject($name, $total){
     
-    $strToReturn = "<DIV class=\"category-name\">" . utf8_encode($name) . "</DIV>";
+    $strTotal = format2dp($total);
+    $strToReturn = "<DIV class=\"category-name\">" . $name . "</DIV>";
     $strToReturn = $strToReturn . "<DIV class=\"category-total\">";
     $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
-    $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $total . "</LABEL></DIV>";
+    $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTotal . "</LABEL></DIV>";
     
     return $strToReturn;
 }//printCashFlowObject()
@@ -97,6 +102,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
     
     $balances = new AccountBalanceReport($reportType, $reportMonth, $reportYear);
     $cashOnHand = "0";
+    $strTemp = "";
     
     $strToReturn = "<DIV id=\"account-balances\">";
     $strToReturn = $strToReturn . "ACCOUNT BALANCES:";
@@ -104,10 +110,11 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
     //print cash accounts (if negative color red?)
     $strToReturn = $strToReturn . "<DIV id=\"cash-accounts\"><label class=\"section-header\">Cash Accounts:</label>";
     foreach($balances->cashAccounts as $a){
-        $strToReturn = $strToReturn . "<DIV class=\"account-name\">" . utf8_encode($a->accountName) . "</DIV>";
+        $strTemp = format2dp($a->accountBalance);
+        $strToReturn = $strToReturn . "<DIV class=\"account-name\">" . $a->accountName . "</DIV>";
         $strToReturn = $strToReturn . "<DIV class=\"account-balance\">";
         $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
-        $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $a->accountBalance . "</LABEL></DIV>";
+        $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
         $cashOnHand += $a->accountBalance;
     }
     $strToReturn = $strToReturn . "</DIV>";
@@ -115,19 +122,21 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
     //print bank accounts
     $strToReturn = $strToReturn . "<DIV id=\"bank-accounts\"><label class=\"section-header\">Bank Accounts:</label>";
     foreach($balances->bankAccounts as $a){
-        $strToReturn = $strToReturn . "<DIV class=\"account-name\">" . utf8_encode($a->accountName) . "</DIV>";
+        $strTemp = format2dp($a->accountBalance);
+        $strToReturn = $strToReturn . "<DIV class=\"account-name\">" . $a->accountName . "</DIV>";
         $strToReturn = $strToReturn . "<DIV class=\"account-balance\">";
         $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
-        $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $a->accountBalance . "</LABEL></DIV>";
+        $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
         $cashOnHand += $a->accountBalance;
     }
     $strToReturn = $strToReturn . "</DIV>";
     
+    $strTemp = format2dp($cashOnHand);
     $strToReturn = $strToReturn . "<DIV id=\"total-cash\">";
     $strToReturn = $strToReturn . "<DIV class=\"account-name\">Total Cash On Hand: </DIV>";
     $strToReturn = $strToReturn . "<DIV class=\"account-balance\">";
     $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
-    $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $cashOnHand . "</LABEL></DIV>";
+    $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
     $strToReturn = $strToReturn . "</DIV>"; //total-cash
     
     $strToReturn = $strToReturn . "</DIV>";

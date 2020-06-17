@@ -36,7 +36,8 @@ class Account{
       
       $strToReturn = "<DIV class=\"w3-container\" id=\"acct_info\">";
       $strToReturn = $strToReturn . "<label hidden id=\"hiddenAcctNum\">" .$this->acct_id . "</label>";
-      $strToReturn = $strToReturn . "ACCOUNT: <b>" . utf8_encode($this->acct_name) . "</b><BR>";
+      //$strToReturn = $strToReturn . "ACCOUNT: <b>" . utf8_encode($this->acct_name) . "</b><BR>";
+      $strToReturn = $strToReturn . "ACCOUNT: <b>" . $this->acct_name . "</b><BR>";
       $strToReturn = $strToReturn . "BALANCE: " . $strBalanceColor . "<BR>"; 
       $strToReturn = $strToReturn . "</DIV>";
       
@@ -81,9 +82,12 @@ class Account{
    
   public function setReceipts(){
       
+      $balance = $this->acct_balance;
+      $isCredit = false;
+      $acct_num = 0;
       $offset = $this->pageNum * $this->rowsPerPage;
       
-      //all receipts
+      //select all receipts for this account
       $select_stmt = "SELECT transactions.trans_id, transactions.trans_date, transactions.category_id, transactions.trans_amount,
             transactions.acct_payer, transactions.acct_receiver, accounts.acct_name, categories.category_name, transactions.description
             FROM ((transactions INNER JOIN accounts ON transactions.acct_receiver=accounts.acct_id)
@@ -94,18 +98,30 @@ class Account{
             FROM ((transactions INNER JOIN accounts ON transactions.acct_payer=accounts.acct_id)
             INNER JOIN categories ON transactions.category_id=categories.category_id)
             WHERE acct_receiver=$this->acct_id 
-            ORDER BY trans_date DESC
-            LIMIT $this->rowsPerPage OFFSET $offset";
+            ORDER BY trans_date DESC";
       
-
-          
       $results_array = DBwrapper::DBselect($select_stmt);
-      $balance = $this->acct_balance;
-      $isCredit = false;
-      $acct_num = 0;
-      $rCounter = 0;
+     
+      //calculate how many receipts to show
+      $rCount = count($results_array);
+      $numReceipts = $rCount - $offset;
+      if($numReceipts > $this->rowsPerPage){
+          $numReceipts = $this->rowsPerPage;
+      }
       
-      foreach($results_array as $r) {
+      //add up balance until offset
+      for($i=0;$i<$offset;$i++){
+          $r = $results_array[$i];
+          if($r['acct_payer'] == $GLOBALS['acct_id']){
+              $balance += $r['trans_amount'];
+          }else{
+              $balance -= $r['trans_amount'];
+          }
+      }//end for
+      
+      //iterate a page of receipts
+      for($i=0;$i<$numReceipts;$i++) {
+          $r = $results_array[$offset + $i];
           
           if($r['acct_payer'] == $GLOBALS['acct_id']){
               $acct_num = $r['acct_receiver'];
@@ -114,15 +130,14 @@ class Account{
               $acct_num = $r['acct_payer'];
               $isCredit = true;
           }
-          $this->receiptArray[$rCounter] = new Receipt($r['trans_id'], $r['trans_date'], $r['category_id'], $r['trans_amount'], $acct_num, $r['acct_name'], $r['category_name'], $r['description'], $isCredit, $balance);
+          $this->receiptArray[$i] = new Receipt($r['trans_id'], $r['trans_date'], $r['category_id'], $r['trans_amount'], $acct_num, $r['acct_name'], $r['category_name'], $r['description'], $isCredit, $balance);
           
           if($isCredit == false){
               $balance += $r['trans_amount'];
           }else{
               $balance -= $r['trans_amount'];
           }
-          $rCounter ++;
-      }
+      }//end for
         
   }//end function setReceipts()
   
