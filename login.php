@@ -74,9 +74,15 @@ if (!isset($_SESSION['userID'])) {
         $_SESSION['dblogin'] = (string)$dbsys->login;
         $_SESSION['dbpassword'] = (string)$dbsys->password;
         
-        $userQuery = "SELECT * FROM users WHERE email='$email' and password='$password'";
+        $userQuery = "SELECT * FROM users WHERE email='$email'";
         $result = DBwrapper::DBselect($userQuery);
-        if (count($result) > 0){
+        $loginSuccess = false;
+        
+        if(count($result)>0){
+            $loginSuccess = password_verify($password, $result[0]['password']);
+        }
+        
+        if ($loginSuccess){
             $_SESSION['userID'] = $result[0]['user_id'];
             $_SESSION['fname'] = $result[0]['fname'];
             $_SESSION['lname'] = $result[0]['lname'];
@@ -95,7 +101,6 @@ if (!isset($_SESSION['userID'])) {
             echo showWelcomeScreen();
         }
         else {
-            //require 'left_nav.php';
             $errMessage = "LOGIN ERROR!";
             echo showLoginScreen($errMessage);
         }

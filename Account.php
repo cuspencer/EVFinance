@@ -9,7 +9,8 @@ class Account{
   public $user_id;
   public $acct_name;
   public $acct_balance;
-  public $canEdit = false;    
+  public $canEdit = false;
+  public $userRole;
   public $currency_id;
   public $currency_string;
   public $receiptArray;
@@ -23,6 +24,7 @@ class Account{
       $this->pageNum = $pageNum;
       $this->currency_id = $_SESSION['currencyID'];
       $this->currency_string = $_SESSION['currencyShort'];
+      $this->userRole = $_SESSION['userRole'];
       $this->setAccountInfo();
       $this->setRows();
       $this->setReceipts();
@@ -36,7 +38,6 @@ class Account{
       
       $strToReturn = "<DIV class=\"w3-container\" id=\"acct_info\">";
       $strToReturn = $strToReturn . "<label hidden id=\"hiddenAcctNum\">" .$this->acct_id . "</label>";
-      //$strToReturn = $strToReturn . "ACCOUNT: <b>" . utf8_encode($this->acct_name) . "</b><BR>";
       $strToReturn = $strToReturn . "ACCOUNT: <b>" . $this->acct_name . "</b><BR>";
       $strToReturn = $strToReturn . "BALANCE: " . $strBalanceColor . "<BR>"; 
       $strToReturn = $strToReturn . "</DIV>";
@@ -161,8 +162,12 @@ class Account{
       $toPrint = $toPrint . "<td>" . moneyFormat($r->balance, $this->currency_string) . "</td>";
       
       //add edit/delete form
-      $toPrint = $toPrint . "<td><label title=\"edit\" class=\"material-icons\" onclick=\"editReceipt($this->acct_id,$r->receiptID)\">create</label>" .
-      "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDelete($this->acct_id,$r->receiptID)\">delete</label></td>";
+      if(($this->canEdit) && !($r->isTransfer && !($this->userRole == "1"))){
+        $toPrint = $toPrint . "<td><label title=\"edit\" class=\"material-icons\" onclick=\"editReceipt($this->acct_id,$r->receiptID)\">create</label>" .
+            "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDelete($this->acct_id,$r->receiptID)\">delete</label></td>";
+      }else{
+          $toPrint = $toPrint . "<td/>";
+      }
       return $toPrint;
   }//end function printReceiptRow()
   
@@ -194,7 +199,9 @@ class Account{
       $strToReturn = $strToReturn . "<DIV class=\"w3-container\" id=\"receipt-container\">";
       
       $strToReturn = $strToReturn . "<DIV class=\"w3-container\" id=\"add-receipt-bar\">";
-      $strToReturn = $strToReturn . "<BUTTON type=\"button\" onclick=\"addReceiptTypeButtons(" . $this->acct_id . ")\">ADD RECEIPT</BUTTON>";
+      if($this->canEdit){
+        $strToReturn = $strToReturn . "<BUTTON type=\"button\" onclick=\"addReceiptTypeButtons(" . $this->acct_id . ")\">ADD RECEIPT</BUTTON>";
+      }
       $strToReturn = $strToReturn . "<BR></DIV><BR>";//close add-receipt-bar
       
       //Table

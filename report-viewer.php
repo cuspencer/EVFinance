@@ -4,7 +4,6 @@ if (!isset($_SESSION['userID'])) {
     header("Location: login.php");
 }
 if($_SESSION['userRole'] == "3"){ //test this!
-    alert("NO ACCESS");
     header("Location: login.php");
 }
 ?>
@@ -12,9 +11,6 @@ if($_SESSION['userRole'] == "3"){ //test this!
 <?php 
 require 'header.php';
 require 'DBwrapper.php';
-require 'ref/money/helpers.php';
-require 'ref/money/Currency.php';
-require 'ref/money/Money.php';
 require 'CashFlowCategory.php';
 require 'AccountBalanceReport.php';
 ?>
@@ -36,7 +32,7 @@ function printCashFlowObject($name, $total){
     $strTotal = format2dp($total);
     $strToReturn = "<DIV class=\"category-name\">" . $name . "</DIV>";
     $strToReturn = $strToReturn . "<DIV class=\"category-total\">";
-    $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
+    $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
     $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTotal . "</LABEL></DIV>";
     
     return $strToReturn;
@@ -113,7 +109,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
         $strTemp = format2dp($a->accountBalance);
         $strToReturn = $strToReturn . "<DIV class=\"account-name\">" . $a->accountName . "</DIV>";
         $strToReturn = $strToReturn . "<DIV class=\"account-balance\">";
-        $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
+        $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
         $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
         $cashOnHand += $a->accountBalance;
     }
@@ -125,7 +121,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
         $strTemp = format2dp($a->accountBalance);
         $strToReturn = $strToReturn . "<DIV class=\"account-name\">" . $a->accountName . "</DIV>";
         $strToReturn = $strToReturn . "<DIV class=\"account-balance\">";
-        $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
+        $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
         $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
         $cashOnHand += $a->accountBalance;
     }
@@ -135,7 +131,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
     $strToReturn = $strToReturn . "<DIV id=\"total-cash\">";
     $strToReturn = $strToReturn . "<DIV class=\"account-name\">Total Cash On Hand: </DIV>";
     $strToReturn = $strToReturn . "<DIV class=\"account-balance\">";
-    $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencyShort'] . " </LABEL>";
+    $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
     $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
     $strToReturn = $strToReturn . "</DIV>"; //total-cash
     
@@ -181,11 +177,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
 
 echo "<div id=\"currency-bar\">";
-echo "<div id=\"currency-editor-button\">";
-echo "<button class=\"rightSide\" onclick=\"showCurrencyModal()\">Exchange Rates</button>";
-echo "<button class=\"leftSide\" onclick=\"printReportEasy()\">Print Report</button>";
-echo "</div>";
-
 echo "<div id=\"currency-selector-bar\">";
 
 //get currency type from session
@@ -202,9 +193,15 @@ foreach($currencyArray as $c){
     if($c['currency_id'] == $myCurrency){
         echo "checked ";
     }
-    echo "onclick=\"setCurrencyType('" . $c['short'] . "', this.value)\"/> </label>";
+    echo "onclick=\"setCurrencyType('" . $c['symbol'] . "', this.value)\"/> </label>";
 }
 
+echo "</div>";
+echo "<div id=\"currency-editor-buttons\">";
+if($_SESSION['userRole'] == "1"){
+    echo "<button onclick=\"showCurrencyModal()\">Exchange Rates</button>";
+}
+echo "<button onclick=\"printReportEasy()\">Print Report</button>";
 echo "</div>";
 echo "</div>"; 
 
@@ -221,7 +218,8 @@ echo "<div class=\"w3-container\">";
 
 $patternTxt = "^\d*([.]\d{1,6})?$";
 foreach($currencyArray as $c){
-    $eRate = $c['exchange_rate'];   //format this
+    $eRate = $c['exchange_rate']; 
+    $eRate = number_format((float)$eRate, 4, '.', '');
     $shorty = $c['short'];
     echo "<div class=\"exchangeRateDisplay\">";
     echo "<div class=\"twoColumns\">";

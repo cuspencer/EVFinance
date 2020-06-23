@@ -54,10 +54,9 @@ div#currency-bar{
 }
 div#currency-selector-bar{
    	font-size: 14px;
+   	margin: 15px;
 } 
-div#currency-editor-button{
-	float: left;
-	width: 40%;
+div#currency-editor-buttons{
 	margin: 15px;
 } 
 div#report-block{
@@ -157,7 +156,6 @@ div#total-cash{
 	color: red;
 }
 .logoutLblPos{
-
    position:fixed;
    right:10px;
    top:10px;

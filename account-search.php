@@ -4,7 +4,7 @@ require 'DBwrapper.php';
 
 function searchAccounts($acctName){
     
-    $query = "SELECT acct_name FROM accounts WHERE acct_name LIKE\"" . $acctName . "%\" AND acct_id > 9999";
+    $query = "SELECT acct_name FROM accounts WHERE acct_name LIKE\"" . $acctName . "%\" AND acct_type = 3";
     
     $result = DBwrapper::DBselect($query);
     

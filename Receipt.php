@@ -8,6 +8,7 @@ class Receipt {
     //receipt details
     public $receiptID; //hidden form field (edit/delete receipt)
     public $isCredit = false; //credit or debit, default is debit
+    public $isTransfer = false; //is it an internal transfer?
     public $date;
     public $amount;
     public $acct_name;
@@ -28,6 +29,9 @@ class Receipt {
         $this->description = $description;
         $this->isCredit = $isCredit;
         $this->balance = $balance;
+        if($categoryID > 8999){
+            $this->isTransfer = true;
+        }
     }//end function (__construct)
     
     

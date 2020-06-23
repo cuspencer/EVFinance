@@ -9,6 +9,7 @@
 rel="stylesheet"/>
 <script src="js/receipts.js"></script>
 <script src="js/reports.js"></script>
+<script src="js/profile.js"></script>
 <title>En Vivo Finance Portal</title>
 </head>
 <body>
