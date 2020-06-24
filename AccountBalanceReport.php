@@ -55,7 +55,7 @@ class AccountBalanceReport{
             if($nextMonth < "10"){
                 $nextMonth = "0" . $nextMonth;
             }
-            $sqlTransDate = " trans_date > \"" . $nextYear . "-" . $nextMonth . "-01\"";
+            $sqlTransDate = " trans_date >= \"" . $nextYear . "-" . $nextMonth . "-01\"";
         }
         else{
             $sqlTransDate = " year(trans_date) > " . $this->reportYear;

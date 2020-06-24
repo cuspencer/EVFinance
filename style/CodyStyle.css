@@ -120,6 +120,10 @@ div#bank-accounts{
 	float:left;
 	width:65%;
 }
+a:hover{
+	cursor: pointer;
+	text-decoration: underline;
+}
 .category-total{
 	margin: 1px;
 	padding:2px;

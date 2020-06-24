@@ -77,43 +77,15 @@ function setCurrencyType(currSymbol, exchRate){
 }//end function setCurrencyType()
 
 
-function printReportCSS(){
-	printDivCSS = new String ('<link href="myprintstyle.css" rel="stylesheet" type="text/css">');
-    window.frames["print_frame"].document.body.innerHTML=printDivCSS + document.getElementById(divId).innerHTML;
-    window.frames["print_frame"].window.focus();
-    window.frames["print_frame"].window.print();
-    window.frames["print_frame"].window.focus(); setTimeout(function() { window.frames["print_frame"].window.print(); }, 0);
-}
-
 
 function printReportEasy(){
 	
 	var divElements = document.getElementById("report-block").innerHTML;
-
-	//Get the HTML of whole page
 	var oldPage = document.body.innerHTML;
-
-	//Reset the pages HTML with divs HTML only
-
 	document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
-
-	//Print Page
 	window.print();
-
-	//Restore orignal HTML
 	document.body.innerHTML = oldPage;	
-}
-
-
-function printReportArea(){
-    var printContent = document.getElementById("report-block");
-    var WinPrint = window.open('', '', 'width=900,height=650');
-    WinPrint.document.write(printContent.innerHTML);
-    WinPrint.document.close();
-    WinPrint.focus();
-    WinPrint.print();
-    WinPrint.close();
-}//end function printReport()
+}//end function printReportEasy()
 
 function closeCurrencyModal(){
 	document.getElementById("currencyModal").style.display = "none";
@@ -121,4 +93,26 @@ function closeCurrencyModal(){
 
 function showCurrencyModal(){
 	document.getElementById("currencyModal").style.display = "block";
+}
+
+
+function closeCategoryCashFlowModal(){
+	document.getElementById("categoryCashFlowModal").style.display = "none";
+}
+
+function showCategoryCashFlowModal(categoryID, month, year){
+	document.getElementById("categoryCashFlowModal").style.display = "block";
+	
+	var xmlhttp = new XMLHttpRequest();
+	
+	xmlhttp.onreadystatechange = function() {
+ 		if (this.readyState == 4 && this.status == 200) {
+	        document.getElementById("categoryCashFlowModal").innerHTML = this.responseText;
+    	}
+	};
+
+	var urlToSend = "category-cash-flow.php?id="+categoryID+"&m="+month+"&y="+year;
+	xmlhttp.open("GET",urlToSend,true);
+	xmlhttp.send();
+	
 }

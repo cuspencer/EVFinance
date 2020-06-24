@@ -27,10 +27,26 @@ function format2dp($strToFormat){
     return number_format((float)$strToFormat, 2, '.', '');
 }
 
-function printCashFlowObject($name, $total){
+function printCashFlowObject($cashFlowObject, $total){
     
     $strTotal = format2dp($total);
-    $strToReturn = "<DIV class=\"category-name\">" . $name . "</DIV>";
+    $strToReturn = "";
+    $month = $cashFlowObject->getMonth();
+    $year = $cashFlowObject->getYear();
+    $name = $cashFlowObject->getName();
+    $type = $cashFlowObject->getType();
+    $id = $cashFlowObject->getID();
+    
+    if($type != "2"){
+        $strToReturn = $strToReturn . "<DIV class=\"category-name\">". $name . "</DIV>";
+    }
+    else{
+        if($month == ""){
+            $month = "0";
+        }
+        $strToReturn = $strToReturn . "<DIV class=\"category-name\"> <a onclick=\"showCategoryCashFlowModal(" .
+                   $id . "," . $month . "," . $year . ")\">". $name . "</a></DIV>";
+    }
     $strToReturn = $strToReturn . "<DIV class=\"category-total\">";
     $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
     $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTotal . "</LABEL></DIV>";
@@ -47,20 +63,19 @@ function recursivePrintCashFlow($cashFlowObject){
     $children = $cashFlowObject->getChildren();    
     $type = $cashFlowObject->getType();
     $total = $cashFlowObject->getTotal();
-    $name = $cashFlowObject->getName();
    
     //print self
     if(($type == "2") && ($total != "0")){ //only print non-empty children
         $strToReturn = $strToReturn . "<DIV class=\"cf-child-node\">";
-        $strToReturn = $strToReturn . printCashFlowObject($name, $total);
+        $strToReturn = $strToReturn . printCashFlowObject($cashFlowObject, $total);
         $strToReturn = $strToReturn . "</DIV>";
     }else if(($type == "1") && ($total != "0")){
         $strToReturn = $strToReturn . "<DIV class=\"cf-parent-node\">";
-        $strToReturn = $strToReturn . printCashFlowObject($name, $total);
+        $strToReturn = $strToReturn . printCashFlowObject($cashFlowObject, $total);
         $strToReturn = $strToReturn . "</DIV>";
     }else if($type == "0"){
         $strToReturn = $strToReturn . "<DIV class=\"cf-super-node\">";
-        $strToReturn = $strToReturn . printCashFlowObject($name, $total);
+        $strToReturn = $strToReturn . printCashFlowObject($cashFlowObject, $total);
         $strToReturn = $strToReturn . "</DIV>";
     }
     
@@ -85,6 +100,15 @@ function printCashFlow($reportType, $reportMonth, $reportYear){
 
     $strToReturn = $strToReturn . recursivePrintCashFlow($inflows);
     $strToReturn = $strToReturn . recursivePrintCashFlow($outflows);
+    
+    //NET CASH FLOW
+    $netCashFlow = $inflows->getTotal() - $outflows->getTotal();
+    $strToReturn = $strToReturn . "<DIV class=\"cf-super-node\">";
+    $strToReturn = $strToReturn . "<DIV class=\"category-name\"> NET CASH FLOW: </DIV>";
+    $strToReturn = $strToReturn . "<DIV class=\"category-total\">";
+    $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
+    $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $netCashFlow . "</LABEL>";
+    $strToReturn = $strToReturn . "</DIV></DIV>";
     
     $strToReturn = $strToReturn . "</DIV>";
     return $strToReturn;
@@ -244,6 +268,10 @@ echo "<button type=\"reset\" class=\"w3-button\" onclick=\"closeCurrencyModal()\
 echo "<button type=\"submit\" class=\"w3-button\">Update</button>";
 echo "</footer>";
 echo "</form></div></div>";
+
+
+//CREATE CATEGORY DISPLAY MODAL HOLDER
+echo "<div id=\"categoryCashFlowModal\" class=\"w3-modal\"></DIV>";
 
 //SHOW REPORT TITLE
 echo "<div id=\"report-block\">";

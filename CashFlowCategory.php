@@ -11,7 +11,7 @@ class CashFlowCategory{
     private $childCategories = array();
     
     private $reportType = "";
-    private $reportMonth = "";
+    private $reportMonth = "0";
     private $reportYear = "";
     
     public function __construct($categoryID, $reportType, $reportMonth, $reportYear){
@@ -104,6 +104,18 @@ class CashFlowCategory{
     
     public function getChildren(){
         return $this->childCategories;
+    }
+    
+    public function getID(){
+        return $this->categoryID;
+    }
+    
+    public function getMonth(){
+        return $this->reportMonth;
+    }
+    
+    public function getYear(){
+        return $this->reportYear;
     }
     
 } //end class CashFlowCategory
