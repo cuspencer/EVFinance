@@ -111,6 +111,11 @@ div#bank-accounts{
 	padding-left:60px;
 	font-size: 12px;
 }
+.cf-sub-child-node{
+	width:100%;
+	padding-left:80px;
+	font-size: 11px;
+}
 .negative-balance-text{
 	color: red;
 }
@@ -129,6 +134,7 @@ a:hover{
 	padding:2px;
 	float:left;
 	width:30%;
+	font-size: 14px;
 }
 .account-name{
 	margin: 1px;

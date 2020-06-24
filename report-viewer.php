@@ -38,7 +38,7 @@ function printCashFlowObject($cashFlowObject, $total){
     $type = $cashFlowObject->getType();
     $id = $cashFlowObject->getID();
     
-    if($type != "2"){
+    if(($type == "0") || ($type == "1")){
         $strToReturn = $strToReturn . "<DIV class=\"category-name\">". $name . "</DIV>";
     }
     else{
@@ -66,7 +66,11 @@ function recursivePrintCashFlow($cashFlowObject){
     $total = $cashFlowObject->getTotal();
    
     //print self
-    if(($type == "2") && ($total != "0")){ //only print non-empty children
+    if(($type == "3") && ($total != "0")){ //only print non-empty children
+        $strToReturn = $strToReturn . "<DIV class=\"cf-sub-child-node\">";
+        $strToReturn = $strToReturn . printCashFlowObject($cashFlowObject, $total);
+        $strToReturn = $strToReturn . "</DIV>";
+    }else if(($type == "2") && ($total != "0")){ //only print non-empty children
         $strToReturn = $strToReturn . "<DIV class=\"cf-child-node\">";
         $strToReturn = $strToReturn . printCashFlowObject($cashFlowObject, $total);
         $strToReturn = $strToReturn . "</DIV>";

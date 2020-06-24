@@ -24,7 +24,7 @@ class CashFlowCategory{
         $this->findChildren();
         $this->categoryCashFlowTotal += $this->getSubTotal();
         
-        if($this->categoryType == "2"){
+        if(($this->categoryType == "2") || ($this->categoryType == "3")){
             $this->categoryCashFlowTotal += $this->getMyCashFlow();
         }
         
