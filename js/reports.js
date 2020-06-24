@@ -55,11 +55,11 @@ function setCurrencyType(currSymbol, exchRate){
 	var currencySymbols = document.getElementsByClassName("currency-symbol");
 	var currencyChoosers = document.getElementsByClassName("currency-chooser");
 
-	console.log("Exchange Rate: " +exchRate);
+	//console.log("Exchange Rate: " +exchRate);
 
 	//iterate and divide, replace symbols
 	for(var i=0;i<reportAmounts.length;i++){
-		var amt = parseFloat(reportAmounts[i].innerHTML) / exchRate;
+		var amt = parseFloat(reportAmounts[i].innerHTML) * exchRate;
 		reportAmounts[i].innerHTML = amt.toFixed(2); 
 	}
 	
@@ -101,13 +101,13 @@ function closeCategoryCashFlowModal(){
 }
 
 function showCategoryCashFlowModal(categoryID, month, year){
-	document.getElementById("categoryCashFlowModal").style.display = "block";
 	
 	var xmlhttp = new XMLHttpRequest();
 	
 	xmlhttp.onreadystatechange = function() {
  		if (this.readyState == 4 && this.status == 200) {
 	        document.getElementById("categoryCashFlowModal").innerHTML = this.responseText;
+	        document.getElementById("categoryCashFlowModal").style.display = "block";
     	}
 	};
 
