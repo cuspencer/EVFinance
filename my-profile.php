@@ -24,45 +24,37 @@ $emailErr = "";
 $userID = $_SESSION['userID'];
 $noErr = true;
 
-
-function test_input($data){
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
 //check and process form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fname= test_input($_POST["fname"]);
+    $fname = test_input($_POST["fname"]);
     $lname = test_input($_POST["lname"]);
     $email = test_input($_POST["email"]);
-    
+
 
     if (!preg_match("/^[a-zA-Z ]*$/",$fname)) {
         $fnameErr = "Only letters and white space allowed";
         $noErr = false;
     }
-    
+
     if (!preg_match("/^[a-zA-Z ]*$/",$lname)) {
         $lnameErr = "Only letters and white space allowed";
         $noErr = false;
     }
-    
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = "Invalid email format";
         $noErr = false;
     }
-    
+
     //query DB for existent email
     $emailQuery = "SELECT user_id FROM users WHERE email=\"" . $email . "\"";
-    
+
     //update the DB if valid
     $userQuery = "UPDATE users SET fname=\"" . $fname . "\", lname=\"" . $lname . "\", email=\"" . $email . "\" WHERE " .
         "user_id=" . $userID;
     if($noErr){
         $emailResult = DBwrapper::DBselect($emailQuery);
-        
+
         if(count($emailResult) > 0){
             $uid = $emailResult[0]['user_id'];
             if($uid != $userID){
@@ -70,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $noErr = false;
             }
         }
-        
+
         if($noErr){
             $updateResult = DBwrapper::DBupdate($userQuery);
             if(!$updateResult){

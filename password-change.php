@@ -2,48 +2,46 @@
 session_start();
 
 require 'DBWrapper.php';
+require 'validation.php';
 
 $userID = $_SESSION['userID'];
-$oldPassword = "";
-$newPassword = "";
+$oldHashedPassword = "";
+$newHashedPassword = "";
 $passwordError = "";
-
-
-function test_input($data){
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
 
 //process form data
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $oldPassword= password_hash(trim($_GET["old"]), PASSWORD_DEFAULT);
+    $oldPassword = trim($_GET["old"]);
     $newPassword1 = trim($_GET["new1"]);
     $newPassword2 = trim($_GET["new2"]);
 
     if($newPassword1 == $newPassword2){
-        $newPassword = password_hash($newPassword1, PASSWORD_DEFAULT);
+
+      if($oldPassword == $newPassword1){
+        $passwordError = "New password must be different from old.";
+      }else {
+        //get old password from DB
+        $passwordQuery = "SELECT password FROM users WHERE user_id=" . $userID;
+        $passwordResult = DBwrapper::DBselect($passwordQuery)[0]['password'];
+        $oldHashedPassword = password_hash($oldPassword, PASSWORD_DEFAULT);
+        $newHashedPassword = password_hash($newPassword1, PASSWORD_DEFAULT);
+
+        if(password_verify($oldHashedPassword,$passwordResult)){
+            $passwordError = "Incorrect current password"; //incorrect current password
+        }
+
+      }
     }else{
         $passwordError = "Passwords Don't Match"; //new passwords don't match
     }
-        
-}
 
-//get old password from DB
-$passwordQuery = "SELECT password FROM users WHERE user_id=" . $userID;
-$passwordResult = DBwrapper::DBselect($passwordQuery)[0]['password'];
+}//end form process
 
-
-if(password_verify($oldPassword,$passwordResult)){
-    $passwordError = "Incorrect current password"; //incorrect current password
-}
 
 if($passwordError == ""){
-    $passwordUpdate = "UPDATE users SET password=\"" . $newPassword . "\" WHERE user_id=" . $userID;
+    $passwordUpdate = "UPDATE users SET password=\"" . $newHashedPassword . "\" WHERE user_id=" . $userID;
     $updateResult = DBwrapper::DBupdate($passwordUpdate);
-    
+
     if($updateResult){
         $passwordError = "Password updated!";
     }else{
@@ -60,4 +58,3 @@ echo "</form>";
 
 
 ?>
-

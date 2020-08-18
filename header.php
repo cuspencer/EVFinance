@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="style/w3.css"/>
 <link rel="stylesheet" href="style/CodyStyle.css"/>
 <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 rel="stylesheet"/>
 <script src="js/receipts.js"></script>
 <script src="js/reports.js"></script>
@@ -21,3 +21,7 @@ rel="stylesheet"/>
 </form>
 </DIV>
 </div>
+
+<?php
+require 'validation.php';
+?>

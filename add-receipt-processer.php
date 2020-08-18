@@ -19,27 +19,27 @@ $tOtherAcctName = "";
 $success = 0;
 
 function findAcctNum($acctName){
-     
+
     $acctNum = -1;
     $query = "SELECT acct_id FROM accounts WHERE acct_name=\"" . $acctName . "\"";
-   
+
     $result = DBwrapper::DBselect($query);
-   
+
     if(($result !== false) && (!empty($result))){
             $acctNum = $result[0]['acct_id'];
     } else {
         echo "ERROR";
     }
- 
+
     return $acctNum;
 }//end function findAcctNum()
 
 
 function addExternalAccountByName($acctName){
-    
+
     $insert = "INSERT INTO accounts (acct_name, acct_type) VALUES (\"" . $acctName . "\", 3 )";
     DBwrapper::DBupdate($insert);
-    
+
     return findAcctNum($acctName);
 }//end function addExternalAccountByName()
 
@@ -51,9 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $tCategoryId = $_POST["tCategoryId"];
     $tDescription = test_input($_POST["tDescription"]);
     $acct_id = $_POST["tMyAcctNum"];
-    
-    
-    
+
+
+
     if ($rType == 3){ //transfer
         $tAcctPayerNum = $acct_id;
         $tAcctRecvNum = $_POST["tOtherAcctNum"];
@@ -68,9 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     }else {
         echo "Type Error <br>";
     }
-    
+
     //DB INSERT TRANSACTION
-    
+
     //if new acct, add to DB first
     if($tAcctPayerNum == -1){
         //echo "addPayer <br>   ";
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $tAcctRecvNum = addExternalAccountByName($tOtherAcctName);
     }
 
-    
+
 }else{
     echo "ERROR IN PROCESSING REQUEST IN: add-receipt-processor";
     exit();
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 $insert = "INSERT INTO transactions (trans_date, trans_amount, acct_payer, acct_receiver, category_id, description) VALUES (\"" .
            $tDate . "\"," . $tAmount . "," . $tAcctPayerNum . "," . $tAcctRecvNum . "," . $tCategoryId . ",\"" . $tDescription . "\")";
 
-$updatePayer = "UPDATE accounts SET acct_balance = acct_balance - " . $tAmount . " WHERE acct_id = " . $tAcctPayerNum;           
+$updatePayer = "UPDATE accounts SET acct_balance = acct_balance - " . $tAmount . " WHERE acct_id = " . $tAcctPayerNum;
 $updateRecv = "UPDATE accounts SET acct_balance = acct_balance + " . $tAmount . " WHERE acct_id = " . $tAcctRecvNum;
 
 //update on successful insert
@@ -100,7 +100,7 @@ if(DBwrapper::DBupdate($insert)){
     $success = 1;
 }
 
-//re-direct to display page 
+//re-direct to display page
 header("Location: account-display.php?acct_id=$acct_id&pagenum=0&success=$success");
 
 ?>
