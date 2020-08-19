@@ -18,9 +18,9 @@ function populateCategories(){
 }//end function populateCategories()
 
 function populateTransferAccts($userId, $acctId){
-    $editable_accts_stmt = "SELECT accounts.acct_id, accounts.acct_name FROM accounts INNER JOIN acct_user_access " . 
-    "ON accounts.acct_id=acct_user_access.acct_id WHERE acct_user_access.user_id = $userId AND acct_user_access.edit = 1 " .
-    "AND accounts.acct_id <> $acctId";
+    $editable_accts_stmt = "SELECT accounts.acct_id, accounts.acct_name FROM accounts INNER JOIN acct_user_access " .
+    "ON accounts.acct_id=acct_user_access.acct_id WHERE acct_active = 1 AND acct_user_access.user_id = $userId " .
+    "AND acct_user_access.edit = 1 AND accounts.acct_id <> $acctId";
     return DBwrapper::DBselect($editable_accts_stmt);
 }//end function populateTransferAccts()
 
@@ -32,7 +32,7 @@ $transferCount = count($transfer_array);
 
 //onsubmit=\"return validateAddReceipt()\"  ???
 
-echo "<FORM name=\"addReceipt\" id=\"addReceipt\" action=\"add-receipt-processer.php\" method=\"POST\" " . 
+echo "<FORM name=\"addReceipt\" id=\"addReceipt\" action=\"add-receipt-processer.php\" method=\"POST\" " .
      "autocomplete=\"off\">";
 echo "<input type=\"hidden\" id=\"tMyAcctNum\" name=\"tMyAcctNum\" value=\"" . $acctId . "\"/>";
 
@@ -58,10 +58,10 @@ $patternTxt = "^\d*([.]\d{1,2})?$"; //matches money
 
 echo "<table>";
 echo "<tr><td><text>Date: </text></td>";
-echo "<td><INPUT type=\"date\" required id=\"tDate\" name=\"tDate\" value=\"" . $maxdate . "\" max=\"" . 
+echo "<td><INPUT type=\"date\" required id=\"tDate\" name=\"tDate\" value=\"" . $maxdate . "\" max=\"" .
     $maxdate . "\"/></td>";
 echo "<td><div id=\"dateErrMsg\" name=\"dateErrMsg\" class=\"errMsg\"></div></td></tr>";
-    
+
 echo "<tr><td><text>Amount: </text></td>";
 echo "<td><span class=\"input-euro left\">";
 echo "<INPUT type=\"text\" required id=\"tAmount\" name=\"tAmount\" pattern=\"$patternTxt\"/></span></td>";
@@ -76,7 +76,7 @@ if ($t == 3){ //internal transfer
     echo "<tr><td><text>Transfer To:</text></td>";
     echo "<td><select required id=\"tOtherAcctNum\" name=\"tOtherAcctNum\">";
     echo "<option value=\"\" selected disabled>Select an account...</option>";
-    
+
     //loop and add transfer options
     foreach ($transfer_array as $r){
         echo "<option value=" . $r['acct_id'] . ">" . $r['acct_name'] . "</option>";
@@ -98,9 +98,9 @@ if ($t == 3){ //internal transfer
     echo "<td><INPUT type=\"text\" required id=\"tOtherAcctName\" name=\"tOtherAcctName\" onkeyup=\"lookupAccount(this.value)\">" .
     "</input></td>";
     echo "<td><div id=\"acctErrMsg\" name=\"acctErrMsg\" class=\"errMsg\"></div></td></tr>";
-    
+
     echo "<tr><td/><td><DIV id=\"livesearch\" class=\"searchResults\"></DIV></td><td/></tr>";
-    
+
     echo "<tr><td><text>Category: </text></td>";
     echo "<td><select required id=\"tCategoryId\" name=\"tCategoryId\">";
     echo "<option value=\"\" selected disabled>Select a category...</option>";
@@ -110,7 +110,7 @@ if ($t == 3){ //internal transfer
     }
     echo "</td>";
     echo "<td><div id=\"catErrMsg\" name=\"catErrMsg\" class=\"errMsg\"></div></td></tr>";
-    
+
 }//end else
 
 

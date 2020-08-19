@@ -24,10 +24,10 @@ function populateCategories(){
     return DBwrapper::DBselect($category_stmt);
 }//end function populateCategories()
 
-function populateTransferAccts($userID, $acctID){
-    $editable_accts_stmt = "SELECT accounts.acct_id, accounts.acct_name FROM accounts INNER JOIN acct_user_access " .
-        "ON accounts.acct_id=acct_user_access.acct_id WHERE acct_user_access.user_id = $userID AND acct_user_access.edit = 1 " .
-        "AND accounts.acct_id <> $acctID";
+function populateTransferAccts($userId, $acctId){
+  $editable_accts_stmt = "SELECT accounts.acct_id, accounts.acct_name FROM accounts INNER JOIN acct_user_access " .
+    "ON accounts.acct_id=acct_user_access.acct_id WHERE acct_active = 1 AND acct_user_access.user_id = $userId " .
+    "AND acct_user_access.edit = 1 AND accounts.acct_id <> $acctId";
     return DBwrapper::DBselect($editable_accts_stmt);
 }//end function populateTransferAccts()
 
@@ -57,7 +57,7 @@ if($receiptInfo["category_id"] > "8999"){
 }else{
     //other acct name
     $account_query = "SELECT acct_name FROM accounts WHERE acct_id = ";
-    if($isCredit) { 
+    if($isCredit) {
         $account_query = $account_query . $receiptInfo['acct_payer'];
     }
     else{
@@ -73,7 +73,7 @@ echo "<input type=\"hidden\" id=\"tMyAcctNum\" name=\"tMyAcctNum\" value=\"" . $
 echo "<input type=\"hidden\" id=\"receiptNum\" name=\"receiptNum\" value=\"" . $receiptNum . "\"/>";
 
 //DATE
-echo "<td><INPUT type=\"date\" required id=\"tDate\" name=\"tDate\" value=\"" . $receiptInfo["trans_date"] . "\" max=\"" . 
+echo "<td><INPUT type=\"date\" required id=\"tDate\" name=\"tDate\" value=\"" . $receiptInfo["trans_date"] . "\" max=\"" .
 $maxdate . "\"/></td>";
 
 //CATEGORY
@@ -83,7 +83,7 @@ if($isTransfer){
 }
 else{
     echo "<td><select required id=\"tCategoryId\" name=\"tCategoryId\">";
-    
+
     //loop and add category options
     foreach ($category_array as $r){
         echo "<option value=" . $r['category_id'];
@@ -112,7 +112,7 @@ if($isTransfer){
     echo "<input type=\"hidden\" id=\"rType\" name=\"rType\" value=\"3\"/>"; //transfer code
 }
 else{
-    echo "<td><INPUT type=\"text\" required id=\"tOtherAcctName\" name=\"tOtherAcctName\" value=\"" . 
+    echo "<td><INPUT type=\"text\" required id=\"tOtherAcctName\" name=\"tOtherAcctName\" value=\"" .
         $tOtherAcctName ."\" onkeyup=\"lookupAccount(this.value)\">" . "</input><BR>" .
         "<DIV id=\"livesearch\" class=\"searchResults\"></DIV></td>";
         if($isCredit){
@@ -123,16 +123,16 @@ else{
 }
 
 //DESCRIPTION
-echo "<td><INPUT type=\"text\" required id=\"tDescription\" name=\"tDescription\"/ value=\"" . 
-    $receiptInfo['description'] . "\"></td>";    
-    
+echo "<td><INPUT type=\"text\" required id=\"tDescription\" name=\"tDescription\"/ value=\"" .
+    $receiptInfo['description'] . "\"></td>";
 
-//AMOUNT 
+
+//AMOUNT
 if($isCredit){
     echo "<td/><td><span class=\"input-euro left\">";
     echo"<INPUT type=\"text\" required id=\"tAmount\" name=\"tAmount\" pattern=\"$patternTxt\" value=\"" .
     $receiptInfo["trans_amount"] . "\"/></span></td>";
-    
+
 }
 else {
     echo "<td><span class=\"input-euro left\">";
