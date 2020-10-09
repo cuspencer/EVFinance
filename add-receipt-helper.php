@@ -13,7 +13,7 @@ $maxdate = date("Y-m-d");
 
 //Populate transfer_array and category_array
 function populateCategories(){
-    $category_stmt = "SELECT * from categories WHERE category_id < 9000 AND category_type = 2";
+    $category_stmt = "SELECT * from categories WHERE category_id < 9000 AND category_type > 1";
     return DBwrapper::DBselect($category_stmt);
 }//end function populateCategories()
 
