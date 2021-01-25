@@ -9,7 +9,7 @@ if($_SESSION['userRole'] == "3"){ //test this!
 }
 ?>
 
-<?php 
+<?php
 require 'header.php';
 require 'DBwrapper.php';
 require 'CashFlowCategory.php';
@@ -29,7 +29,7 @@ function format2dp($strToFormat){
 }
 
 function printCashFlowObject($cashFlowObject, $total){
-    
+
     $strTotal = format2dp($total);
     $strToReturn = "";
     $month = $cashFlowObject->getMonth();
@@ -37,7 +37,7 @@ function printCashFlowObject($cashFlowObject, $total){
     $name = $cashFlowObject->getName();
     $type = $cashFlowObject->getType();
     $id = $cashFlowObject->getID();
-    
+
     if(($type == "0") || ($type == "1")){
         $strToReturn = $strToReturn . "<DIV class=\"category-name\">". $name . "</DIV>";
     }
@@ -51,7 +51,7 @@ function printCashFlowObject($cashFlowObject, $total){
     $strToReturn = $strToReturn . "<DIV class=\"category-total\">";
     $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
     $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTotal . "</LABEL></DIV>";
-    
+
     return $strToReturn;
 }//printCashFlowObject()
 
@@ -59,12 +59,12 @@ function printCashFlowObject($cashFlowObject, $total){
  *
  */
 function recursivePrintCashFlow($cashFlowObject){
-    
+
     $strToReturn = "";
-    $children = $cashFlowObject->getChildren();    
+    $children = $cashFlowObject->getChildren();
     $type = $cashFlowObject->getType();
     $total = $cashFlowObject->getTotal();
-   
+
     //print self
     if(($type == "3") && ($total != "0")){ //only print non-empty children
         $strToReturn = $strToReturn . "<DIV class=\"cf-sub-child-node\">";
@@ -83,12 +83,12 @@ function recursivePrintCashFlow($cashFlowObject){
         $strToReturn = $strToReturn . printCashFlowObject($cashFlowObject, $total);
         $strToReturn = $strToReturn . "</DIV>";
     }
-    
+
     //print children
     foreach($children as $c){
         $strToReturn = $strToReturn . recursivePrintCashFlow($c);
     }
-    
+
     return $strToReturn;
 }//end function recursivePrintCashFlow()
 
@@ -99,13 +99,13 @@ function recursivePrintCashFlow($cashFlowObject){
 function printCashFlow($reportType, $reportMonth, $reportYear){
     $inflows = new CashFlowCategory("1", $reportType, $reportMonth, $reportYear);
     $outflows = new CashFlowCategory("2", $reportType, $reportMonth, $reportYear);
-    
+
     $strToReturn = "<DIV id=\"cash-flow-report\">";
     $strToReturn = $strToReturn . "CASH FLOW:<BR>";
 
     $strToReturn = $strToReturn . recursivePrintCashFlow($inflows);
     $strToReturn = $strToReturn . recursivePrintCashFlow($outflows);
-    
+
     //NET CASH FLOW
     $netCashFlow = $inflows->getTotal() - $outflows->getTotal();
     $strToReturn = $strToReturn . "<DIV class=\"cf-super-node\">";
@@ -114,24 +114,24 @@ function printCashFlow($reportType, $reportMonth, $reportYear){
     $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
     $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $netCashFlow . "</LABEL>";
     $strToReturn = $strToReturn . "</DIV></DIV>";
-    
+
     $strToReturn = $strToReturn . "</DIV>";
     return $strToReturn;
 }//end function printCashFlow
 
 
 /*
- * 
+ *
  */
 function printAccountBalances($reportType, $reportMonth, $reportYear){
-    
+
     $balances = new AccountBalanceReport($reportType, $reportMonth, $reportYear);
     $cashOnHand = "0";
     $strTemp = "";
-    
+
     $strToReturn = "<DIV id=\"account-balances\">";
     $strToReturn = $strToReturn . "ACCOUNT BALANCES:";
-  
+
     //print cash accounts (if negative color red?)
     $strToReturn = $strToReturn . "<DIV id=\"cash-accounts\"><label class=\"section-header\">Cash Accounts:</label>";
     foreach($balances->cashAccounts as $a){
@@ -143,7 +143,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
         $cashOnHand += $a->accountBalance;
     }
     $strToReturn = $strToReturn . "</DIV>";
-    
+
     //print bank accounts
     $strToReturn = $strToReturn . "<DIV id=\"bank-accounts\"><label class=\"section-header\">Bank Accounts:</label>";
     foreach($balances->bankAccounts as $a){
@@ -155,7 +155,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
         $cashOnHand += $a->accountBalance;
     }
     $strToReturn = $strToReturn . "</DIV>";
-    
+
     $strTemp = format2dp($cashOnHand);
     $strToReturn = $strToReturn . "<DIV id=\"total-cash\">";
     $strToReturn = $strToReturn . "<DIV class=\"account-name\">Total Cash On Hand: </DIV>";
@@ -163,7 +163,7 @@ function printAccountBalances($reportType, $reportMonth, $reportYear){
     $strToReturn = $strToReturn . "<LABEL class=\"currency-symbol\">" . $_SESSION['currencySymbol'] . " </LABEL>";
     $strToReturn = $strToReturn . "<LABEL class=\"report-amount\">" . $strTemp . "</LABEL></DIV>";
     $strToReturn = $strToReturn . "</DIV>"; //total-cash
-    
+
     $strToReturn = $strToReturn . "</DIV>";
     return $strToReturn;
 }//end functino printAccountBalances()
@@ -189,14 +189,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
     if($reportType == "2"){
         $reportMonth = $_GET["reportMonth"];
     }
-    
+
     //currency stuff
     $sqlCurrShortQuery = "SELECT short FROM currencies";
     $currShortArray = DBwrapper::DBselect($sqlCurrShortQuery);
-    
+
     foreach($currShortArray as $c){
         $cShort = $c['short'];
-        $newRate = $_POST[$cShort];    
+        $newRate = $_POST[$cShort];
         $sqlCurrUpdate = "UPDATE currencies SET exchange_rate=" . $newRate . " WHERE short='" . $cShort . "'";
         DBwrapper::DBupdate($sqlCurrUpdate);
     }
@@ -216,7 +216,7 @@ $currencyArray = DBwrapper::DBselect($sqlCurrencyQuery);
 echo "<text>Change currency?  </text>";
 
 foreach($currencyArray as $c){
-    
+
     echo "<label>" . $c['short'] . "<input type=\"radio\" class=\"currency-chooser\" name=\"currType\" value=\""
     . $c['exchange_rate'] . "\" ";
     if($c['currency_id'] == $myCurrency){
@@ -232,7 +232,7 @@ if($_SESSION['userRole'] == "1"){
 }
 echo "<button onclick=\"printReportEasy()\">Print Report</button>";
 echo "</div>";
-echo "</div>"; 
+echo "</div>";
 
 //CREATE CURRENCY EDITING MODAL
 echo "<div id=\"currencyModal\" class=\"w3-modal\">";
@@ -247,7 +247,7 @@ echo "<div class=\"w3-container\">";
 
 $patternTxt = "^\d*([.]\d{1,6})?$";
 foreach($currencyArray as $c){
-    $eRate = $c['exchange_rate']; 
+    $eRate = $c['exchange_rate'];
     $eRate = number_format((float)$eRate, 4, '.', '');
     $shorty = $c['short'];
     echo "<div class=\"exchangeRateDisplay\">";
@@ -262,11 +262,11 @@ foreach($currencyArray as $c){
     else{
         echo "pattern=\"$patternTxt\"/>";
     }
-    
+
     echo "</div>";
     echo "</div>";
 }//end foreach
-        
+
 echo "</div>";
 echo "<footer class=\"w3-container w3-light-green\">";
 echo "<button type=\"reset\" class=\"w3-button\" onclick=\"closeCurrencyModal()\">Cancel</button>";
@@ -281,7 +281,7 @@ echo "<div id=\"categoryCashFlowModal\" class=\"w3-modal\"></DIV>";
 //SHOW REPORT TITLE
 echo "<div id=\"report-block\">";
 echo "<div id=\"report-title\">";
-echo "<h3>" . $_SESSION['sysName'] ."</h3>"; 
+echo "<h3>" . $_SESSION['sysName'] ."</h3>";
 if($reportType == "1"){
     echo "<h5>Annual Report " . $reportYear . "</h5>";
 }else{

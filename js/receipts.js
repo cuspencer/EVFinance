@@ -2,7 +2,7 @@
 
 function addReceiptFields(rType,rAcct){
 	var xmlhttp = new XMLHttpRequest();
-	
+
 	xmlhttp.onreadystatechange = function() {
  		if (this.readyState == 4 && this.status == 200) {
 	        document.getElementById("add-receipt-bar").innerHTML = this.responseText;
@@ -10,22 +10,22 @@ function addReceiptFields(rType,rAcct){
 	};
 
 	var urlToSend = "add-receipt-helper.php?a="+rAcct+"&t="+rType;
-	
+
 	xmlhttp.open("GET",urlToSend,true);
 	xmlhttp.send();
-	
+
 }//end function addFields(rType)
 
 
 function addReceiptTypeButtons(rAcct){
-	
+
 	var htmlReceiptTypeButtons = "";
-	
-	htmlReceiptTypeButtons += "<label>Expense<input type=\"radio\" name=\"rType\" onclick=\"addReceiptFields(1," + 
+
+	htmlReceiptTypeButtons += "<label>Expense<input type=\"radio\" name=\"rType\" onclick=\"addReceiptFields(1," +
 	rAcct + ")\"/> </label>";
-	htmlReceiptTypeButtons += "<label>Income<input type=\"radio\" name=\"rType\" onclick=\"addReceiptFields(2," + 
+	htmlReceiptTypeButtons += "<label>Income<input type=\"radio\" name=\"rType\" onclick=\"addReceiptFields(2," +
 	rAcct+ ")\"/> </label>";
-	htmlReceiptTypeButtons += "<label>Internal Transfer<input type=\"radio\" name=\"rType\" onclick=\"addReceiptFields(3," + 
+	htmlReceiptTypeButtons += "<label>Internal Transfer<input type=\"radio\" name=\"rType\" onclick=\"addReceiptFields(3," +
 	rAcct + ")\"/> </label>";
 
 	document.getElementById("add-receipt-bar").innerHTML = htmlReceiptTypeButtons;
@@ -39,7 +39,7 @@ function addReceiptTypeButtons(rAcct){
  */
 function showReceiptPage(acctNum, pageNum){
 	var xmlhttp = new XMLHttpRequest();
-	
+
 	xmlhttp.onreadystatechange = function() {
  		if (this.readyState == 4 && this.status == 200) {
 	        document.getElementById("maincontent").innerHTML = this.responseText;
@@ -47,15 +47,15 @@ function showReceiptPage(acctNum, pageNum){
 	};
 
 	var urlToSend = "display-receipt-page.php?acct_id="+acctNum+"&pagenum="+pageNum;
-	
+
 	xmlhttp.open("GET",urlToSend,true);
 	xmlhttp.send();
-	
+
 }//end function showReceiptPage()
 
 function validateAddReceipt(){
 	var tAmount = document.getElementById("tAmount").innerHTML;
-	console.log(tAmount);
+	//console.log(tAmount);
 	return validateAmount(tAmount);
 }//end function validateAddReceipt()
 
@@ -106,9 +106,9 @@ function confirmDelete(acctNum,receiptNum){
 }//end function confirmDelete()
 
 function deleteReceipt(acctNum,receiptNum){
-	
+
 	var xmlhttp = new XMLHttpRequest();
-	
+
 	xmlhttp.onreadystatechange = function() {
  		if (this.readyState == 4 && this.status == 200) {
 	        showReceiptPage(acctNum, "0");
@@ -116,16 +116,16 @@ function deleteReceipt(acctNum,receiptNum){
 	};
 
 	var urlToSend = "delete-receipt.php?r=" + receiptNum;
-	
+
 	xmlhttp.open("GET",urlToSend,true);
 	xmlhttp.send();
-	
+
 }//end function deleteReceipt()
 
 function editReceipt(acctNum,receiptNum){
-	
+
 	var xmlhttp = new XMLHttpRequest();
-	
+
 	xmlhttp.onreadystatechange = function() {
  		if (this.readyState == 4 && this.status == 200) {
  			document.getElementById("add-receipt-bar").style.display = "none";
@@ -134,10 +134,10 @@ function editReceipt(acctNum,receiptNum){
 	};
 
 	var urlToSend = "edit-receipt-helper.php?r=" + receiptNum;
-	
+
 	xmlhttp.open("GET",urlToSend,true);
 	xmlhttp.send();
-	
+
 }//end function editReceipt()
 
 function getCurrentReceiptPageFromHTML(){
@@ -150,14 +150,12 @@ function getCurrentReceiptPageFromHTML(){
 	return pageNum;
 }//end function getCurrentReceiptPageFromHTML();
 
-function cancelEdit(){
+function cancelReceiptEdit(){
 	var pageNum = getCurrentReceiptPageFromHTML();
 	var acctNum = getAccountNumberFromHTML();
-	//console.log("Account Num: " + acctNum);
-	//console.log("Page Num: " + pageNum);
 	showReceiptPage(acctNum, pageNum);
-}
+}//end function cancelReceiptEdit()
 
-function submitEdit(){
+function submitReceiptEdit(){
 	document.getElementById('editReceiptForm').submit();
-}//end function submitEdit()
+}//end function submitReceiptEdit()

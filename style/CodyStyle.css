@@ -41,7 +41,7 @@ div#maincontent {
  font-weight:bold;
  width:100%;
  }
- 
+
 div#currency-bar{
 	clear:both;
 	float: right;
@@ -55,10 +55,10 @@ div#currency-bar{
 div#currency-selector-bar{
    	font-size: 14px;
    	margin: 15px;
-} 
+}
 div#currency-editor-buttons{
 	margin: 15px;
-} 
+}
 div#report-block{
 	clear: both;
 	margin:20px;
@@ -72,7 +72,7 @@ div#cash-flow-report{
    	font-size: 20px;
    	border-style:solid;
 	border-width:1px;
-} 
+}
 div#account-balances{
 	padding: 5px;
 	margin:5px;
@@ -95,9 +95,9 @@ div#bank-accounts{
 	font-weight:normal;
 }
 .cf-super-node{
-	padding:5px;
+	padding: 5px;
 	font-weight: bold;
-	width:100%;
+	width: 100%;
 	font-size: 16px;
 }
 .cf-parent-node{
@@ -180,14 +180,14 @@ div#total-cash{
 	font-weight: bold;
 }
 .input-euro {
-     position: relative;  
+     position: relative;
 }
 .input-euro.left input {
      padding-left:18px;
 }
 .input-euro.right input {
      padding-right:18px;
-     text-align:end; 
+     text-align:end;
 }
 
 .input-euro:before {
@@ -219,7 +219,19 @@ div#total-cash{
 .mediumModal{
 	max-width:400px;
 }
+.largeModal{
+	max-width:600px;
+}
 .twoColumns{
 	float: left;
   	width: 50%;
+}
+.admin-menu-item{
+	margin: 5px;
+	font-size: 18px;
+	font-weight:normal;
+}
+.admin-icons {
+  position: relative;
+  top: 5px;
 }

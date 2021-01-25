@@ -69,6 +69,7 @@ if($receiptInfo["category_id"] > "8999"){
 
 
 //echo "<FORM id=\"editReceiptForm\" ACTION=\"edit-receipt.php\" METHOD=\"POST\">";
+echo "<tr class=\"w3-table\" id=\"" . $receiptNum . "\">";
 echo "<input type=\"hidden\" id=\"tMyAcctNum\" name=\"tMyAcctNum\" value=\"" . $acctID . "\"/>";
 echo "<input type=\"hidden\" id=\"receiptNum\" name=\"receiptNum\" value=\"" . $receiptNum . "\"/>";
 
@@ -82,7 +83,7 @@ if($isTransfer){
     echo "<input type=\"text\" id=\"tCategoryName\" name=\"tCategoryName\" value=\"Internal Transfer\" readonly/></td>";
 }
 else{
-    echo "<td><select required id=\"tCategoryId\" name=\"tCategoryId\">";
+    echo "<td><select style=\"font-size:14px;\" required id=\"tCategoryId\" name=\"tCategoryId\">";
 
     //loop and add category options
     foreach ($category_array as $r){
@@ -98,7 +99,7 @@ else{
 
 //ACCOUNT
 if($isTransfer){
-    echo "<td><select required id=\"tOtherAcctNum\" name=\"tOtherAcctNum\">";
+    echo "<td><select style=\"font-size:14px;\" required id=\"tOtherAcctNum\" name=\"tOtherAcctNum\">";
 
     //loop and add transfer options, select if currently selected
     foreach ($transfer_array as $r){
@@ -112,7 +113,7 @@ if($isTransfer){
     echo "<input type=\"hidden\" id=\"rType\" name=\"rType\" value=\"3\"/>"; //transfer code
 }
 else{
-    echo "<td><INPUT type=\"text\" required id=\"tOtherAcctName\" name=\"tOtherAcctName\" value=\"" .
+    echo "<td><INPUT type=\"text\" size=\"10\" required id=\"tOtherAcctName\" name=\"tOtherAcctName\" value=\"" .
         $tOtherAcctName ."\" onkeyup=\"lookupAccount(this.value)\">" . "</input><BR>" .
         "<DIV id=\"livesearch\" class=\"searchResults\"></DIV></td>";
         if($isCredit){
@@ -130,20 +131,19 @@ echo "<td><INPUT type=\"text\" required id=\"tDescription\" name=\"tDescription\
 //AMOUNT
 if($isCredit){
     echo "<td/><td><span class=\"input-euro left\">";
-    echo"<INPUT type=\"text\" required id=\"tAmount\" name=\"tAmount\" pattern=\"$patternTxt\" value=\"" .
+    echo"<INPUT type=\"text\" required id=\"tAmount\" name=\"tAmount\" size=\"6\" pattern=\"$patternTxt\" value=\"" .
     $receiptInfo["trans_amount"] . "\"/></span></td>";
 
 }
 else {
     echo "<td><span class=\"input-euro left\">";
-    echo "<INPUT type=\"text\" required id=\"tAmount\" name=\"tAmount\" pattern=\"$patternTxt\" value=\"" .
+    echo "<INPUT type=\"text\" required id=\"tAmount\" name=\"tAmount\" size=\"6\" pattern=\"$patternTxt\" value=\"" .
     $receiptInfo["trans_amount"] . "\"/></span></td><td/>";
 }
 
 //Cancel
-echo "<TD/><TD><label title=\"cancel\" class=\"material-icons\" onclick=\"cancelEdit()\">close</label>";
+echo "<TD/><TD><label title=\"cancel\" class=\"material-icons\" onclick=\"cancelReceiptEdit()\">close</label>";
 
 //Submit
-echo "<label title=\"submit\" class=\"material-icons\" onclick=\"submitEdit()\">done</label></td>";
-
+echo "<label title=\"submit\" class=\"material-icons\" onclick=\"submitReceiptEdit()\">done</label></td></tr>";
 ?>

@@ -2,10 +2,10 @@
 session_start();
 if (!isset($_SESSION['userID'])) {
     header("Location: login.php");
-} 
+}
 
 require 'Account.php';
-require 'header.php'; 
+require 'header.php';
 ?>
 
 <div id="mainbody" class="w3-container">
@@ -42,9 +42,8 @@ $a = new Account($acct_id, $user_id, $pageNum);
 echo $a->displayAccountInfo();
 if ($success == 0){
     echo "ERROR in updating record<br>";
-} else if ($success == 1){
-    //echo "SUCCESSFUL add receipt<br>";
 }
+
 echo $a->printReceiptPage();
 
 ?>
