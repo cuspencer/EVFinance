@@ -153,7 +153,7 @@ echo "<DIV id=\"successMessage\" class=\"w3-green\" />$successMessage</DIV>";
 echo "</DIV></DIV>";
 
 //Placeholders for modals
-echo "<div id=\"confirmDeleteModal\" class=\"w3-modal\"></DIV>";
+echo "<div id=\"confirmCategoryDeleteModal\" class=\"w3-modal\"></DIV>";
 echo "<div id=\"addCategoryModal\" class=\"w3-modal\"></DIV>";
 
 
