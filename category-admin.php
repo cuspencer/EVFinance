@@ -150,7 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
 echo "<DIV id=\"maincontent\" class=\"w3-container\">";
-
+echo "<DIV id=\"admin-back-button\" class=\"w3-container\"><BUTTON onclick=\"location.href = 'admin-menu.php';\">";
+echo "<span class=\"material-icons\">reply</span>BACK</BUTTON></DIV>";
 echo "<DIV id=\"titlearea\" class=\"w3-container\">";
 echo "<H3>Category Editor</H3>";
 echo "<DIV id=\"addCategoryButtonHolder\" class=\"w3-container\">";

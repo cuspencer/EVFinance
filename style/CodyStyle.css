@@ -41,7 +41,18 @@ div#maincontent {
  font-weight:bold;
  width:100%;
  }
-
+div#admin-back-button{
+	float: right;
+	margin-right: 30px;
+	margin-top: 10px;
+	padding: 10px;
+}
+div#titlearea{
+	float: left;
+	margin-right: 30px;
+	margin-top: 10px;
+	padding: 10px;
+}
 div#currency-bar{
 	clear:both;
 	float: right;
