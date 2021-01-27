@@ -5,13 +5,6 @@ require 'header.php';
 require 'DBwrapper.php';
 
 
-function randomPassword( $length = 8 ) {
-  $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
-  $length = rand(10, 16);
-  $password = substr( str_shuffle(sha1(rand() . time()) . $chars ), 0, $length );
-  return $password;
-}//end randomPassword()
-
 function showForm($errMessage = ""){
 
   $strToReturn = "";
@@ -76,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if(test_email($email)){
     $sqlQuery = "SELECT user_id FROM users WHERE email = \"" . $email . "\"";
     $result = DBwrapper::DBselect($sqlQuery);
-  } 
+  }
 
   //does user exist?
   if(count($result)>0){

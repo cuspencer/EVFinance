@@ -1,6 +1,13 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['userID'])) {
+    header("Location: login.php");
+}
+if($_SESSION['userRole'] == "3"){ //test this!
+    header("Location: login.php");
+}
+
 require 'header.php';
 require 'left_nav.php';
 require 'DBwrapper.php';
@@ -81,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
   $oldCategoryId = $_POST["oldCategoryId"];
   $newCategoryId = $_POST["childCategoryId"];
-  $newCategoryName = $_POST["childCategoryName"];
+  $newCategoryName = test_input($_POST["childCategoryName"]);
   $parentId = $_POST["parentCategoryId"];
 
   $sqlUpdateTransactions = "";

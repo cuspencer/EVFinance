@@ -40,7 +40,6 @@ foreach ($moderatorArray as $m) {
   $sqlAccessInsert .= "($userID,$accountID,0,1,0),";
 }
 $sqlAccessInsert = rtrim($sqlAccessInsert, ", "); //trim final comma
-echo $sqlAccessInsert;
 
 //conditionally update DB
 $success = DBwrapper::DBupdate($sqlAccountInsert);

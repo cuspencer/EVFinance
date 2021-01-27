@@ -86,6 +86,21 @@ function editAccount(account_id){
 	xmlhttp.send();
 }//end function editAccount()
 
+function editUser(user_id){
+	clearMessages();
+	var xmlhttp = new XMLHttpRequest();
+
+	xmlhttp.onreadystatechange = function() {
+ 		if (this.readyState == 4 && this.status == 200) {
+ 			document.getElementById(user_id).innerHTML = this.responseText;
+    	}
+	};
+
+	var urlToSend = "edit-user-helper.php?u=" + user_id;
+	xmlhttp.open("GET",urlToSend,true);
+	xmlhttp.send();
+}//end function editUser()
+
 function editCategory(category_id){
 	clearMessages();
 	var xmlhttp = new XMLHttpRequest();
@@ -117,8 +132,34 @@ function confirmDeleteCategory(category_id){
 	xmlhttp.send();
 }//end function confirmDeleteCategory
 
+function confirmDeleteUser(user_id, user_name){
+	clearMessages();
+	document.getElementById("confirmUserDeleteName").innerHTML = user_name;
+	document.getElementById("confirmUserDeleteID").value = user_id;
+	document.getElementById("confirmUserDeleteModal").style.display = "block";
+}//end function confirmDeleteUser
+
+function closeConfirmDeleteUserModal(){
+	document.getElementById("confirmUserDeleteModal").style.display = "none";
+}
+
+function deleteUser(){
+	clearMessages();
+	document.getElementById('deleteUserForm').submit();
+}
+
 function closeConfirmDeleteModal(){
 	document.getElementById("confirmCategoryDeleteModal").style.display = "none";
+}
+
+function showAddUserModal(){
+	clearMessages();
+	document.getElementById("addUserModal").style.display = "block";
+}
+
+function closeAddUserModal(){
+	document.getElementById('addUserModalErrorMessage').innerHTML = "";
+	document.getElementById("addUserModal").style.display = "none";
 }
 
 function showAddAccountModal(){
@@ -145,6 +186,21 @@ function addAccount(){
 		document.getElementById('addAccountForm').submit();
 	}	else {
 			document.getElementById('addAccountModalErrorMessage').innerHTML = "ERROR: " + errMessage;
+	}
+}
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function addUser(){
+	var email = document.getElementById("newUserEmail").value;
+
+	if(validateEmail(email)){
+		document.getElementById('addUserForm').submit();
+	}	else {
+		document.getElementById('addUserModalErrorMessage').innerHTML = "ERROR: Invalid format for email address.";
 	}
 }
 
@@ -179,7 +235,29 @@ function showAddCategoryModal(){
 	xmlhttp.send();
 }//end function showAddCategoryModal
 
+function cancelUserEdit(userID, userFName, userLName, userRole, userEmail){
+	clearMessages();
+	//reset table row
+	var htmlCategoryReset = "<tr class=\"w3-table\" id=\"" + userID + "\">";
+	htmlCategoryReset += "<td>" + userFName + "</td>";
+	htmlCategoryReset += "<td>" + userLName + "</td>";
+	htmlCategoryReset += "<td>" + userEmail + "</td>";
+	if(userRole == 3){
+		htmlCategoryReset += "<td>User</td>";
+	}else if (userRole == 2){
+		htmlCategoryReset += "<td>Moderator</td>";
+	}else if (userRole == 1){
+		htmlCategoryReset += "<td>Admin</td>";
+	}
+	htmlCategoryReset += "<td><label title=\"edit\" class=\"material-icons\" onclick=\"editUser(" + userID +
+		")\">create</label>" + "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDeleteUser(" +
+		userID + ")\">delete</label></td>";
+	htmlCategoryReset += "</tr>";
+	document.getElementById(userID).innerHTML = htmlCategoryReset;
+}//end function cancelUserEdit()
+
 function cancelCategoryEdit(category_id, category_name, parent_id, parent_name){
+	clearMessages();
 	//reset table row
 	var htmlCategoryReset = "<tr class=\"w3-table\" id=\"" + category_id + "\">";
 	htmlCategoryReset += "<td class=\"categoryIDLabel\">" + category_id + "</td>";
@@ -234,3 +312,7 @@ function submitCategoryEdit(){
 	}
 
 }//end function submitCategoryEdit()
+
+function submitUserEdit(){
+	document.getElementById('editUserForm').submit();
+}//end function submitUserEdit()

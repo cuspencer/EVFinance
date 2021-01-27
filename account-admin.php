@@ -1,6 +1,13 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['userID'])) {
+    header("Location: login.php");
+}
+if($_SESSION['userRole'] == "3"){ //test this!
+    header("Location: login.php");
+}
+
 require 'header.php';
 require 'left_nav.php';
 require 'DBwrapper.php';
@@ -91,7 +98,7 @@ function printAccountsTable(){
 }//end function printAccountsTable()
 
 
-//Process success and error messages from adding/deleting categories
+//Process success and error messages from adding/deleting accounts
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
   $dResult = 0;
@@ -122,9 +129,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
   $accountID = $_POST["accountID"];
-  $accountName = $_POST["accountName"];
+  $accountName = test_input($_POST["accountName"]);
   $accountType = $_POST["accountType"];
-  $accountBalance = $_POST["accountBalance"];
+  $accountBalance = test_input($_POST["accountBalance"]);
   $accountActive = "";
 
 

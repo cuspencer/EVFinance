@@ -9,10 +9,10 @@ $accountBalance = "";
 $accountActive = "";
 $accountType = "";
 
-//get category ID from AJAX request
+//get account ID from AJAX request
 $accountID = $_GET["a"];
 
-//select all cash and bank accounts
+//get account info
 $sqlAccountSelect = "SELECT * FROM accounts WHERE acct_id=" . $accountID;
 $accounts_array = DBwrapper::DBselect($sqlAccountSelect);
 $accountName = $accounts_array[0]['acct_name'];
