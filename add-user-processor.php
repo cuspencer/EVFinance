@@ -79,7 +79,7 @@ if ($addUserSuccess){
   $header .= "MIME-Version: 1.0\r\n";
   $header .= "Content-type: text/html\r\n";
 
-  //$addUserSuccess = mail ($email,$subject,$message,$header);
+  $addUserSuccess = mail ($email,$subject,$message,$header);
 }//end email new user
 
 if($createAccount){

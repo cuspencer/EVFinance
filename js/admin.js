@@ -1,5 +1,18 @@
 "use strict";
 
+function closeModal(modalID){
+	document.getElementById(modalID).style.display = "none";
+}
+
+function showModal(modalID){
+	document.getElementById(modalID).style.display = "block";
+}
+
+function clearMessages(){
+	document.getElementById("successMessage").style.display = "none";
+	document.getElementById("errorMessage").style.display = "none";
+}
+
 function accountInputTest(newAccountName, newAccountBalance){
 	var acctNames = document.getElementsByClassName("accountNameLabel");
 	var errMessage = "";
@@ -50,10 +63,7 @@ function categoryInputTest(categoryID,categoryName){
 	return errMessage;
 }//end function categoryInputTest()
 
-function clearMessages(){
-	document.getElementById("successMessage").style.display = "none";
-	document.getElementById("errorMessage").style.display = "none";
-}
+
 
 function submitAccountEdit(){
 	clearMessages();
@@ -132,12 +142,25 @@ function confirmDeleteCategory(category_id){
 	xmlhttp.send();
 }//end function confirmDeleteCategory
 
+function confirmDeleteAccount(acct_id, acct_name){
+	clearMessages();
+	document.getElementById("confirmAccountDeleteName").innerHTML = acct_name;
+	document.getElementById("confirmAccountDeleteID").value = acct_id;
+	showModal('confirmAccountDeleteModal');
+}//end function confirmDeleteAccount
+
+function deleteAccount(){
+	clearMessages();
+	document.getElementById('deleteAccountForm').submit();
+}
+
 function confirmDeleteUser(user_id, user_name){
 	clearMessages();
 	document.getElementById("confirmUserDeleteName").innerHTML = user_name;
 	document.getElementById("confirmUserDeleteID").value = user_id;
-	document.getElementById("confirmUserDeleteModal").style.display = "block";
+	showModal("confirmUserDeleteModal");
 }//end function confirmDeleteUser
+
 
 function closeConfirmDeleteUserModal(){
 	document.getElementById("confirmUserDeleteModal").style.display = "none";
@@ -290,10 +313,15 @@ function cancelAccountEdit(account_id, account_name, account_type, account_balan
 		htmlCategoryReset += "<td><input type=\"checkbox\" name=\"accountActive\" disabled/></td>";
 	}
 	htmlCategoryReset += "<td><label title=\"edit\" class=\"material-icons\" onclick=\"editAccount(" + account_id +
-		")\">create</label></td>";
-		// + "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDeleteAccount(" +
-		//account_id + ")\">delete</label></td>";
-	htmlCategoryReset += "</tr>";
+		")\">create</label>";
+
+	if(account_balance == 0) {
+		 htmlCategoryReset += "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDeleteAccount(" +
+		account_id + ",'" + account_name +"')\">delete</label></td></tr>";
+	} else {
+		htmlCategoryReset += "</td></tr>";
+	}
+
 	document.getElementById(account_id).innerHTML = htmlCategoryReset;
 }//end function cancelCategoryEdit()
 

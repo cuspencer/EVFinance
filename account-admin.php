@@ -18,6 +18,33 @@ $newAccountName = "";
 $errorMessage = "";
 $successMessage = "";
 
+function printDeleteAccountModal(){
+
+  //create user deletion modal
+  echo "<div id=\"confirmAccountDeleteModal\" class=\"w3-modal\">";
+  echo "<div class=\"w3-modal-content\">";
+  echo "<form id=\"deleteAccountForm\" action=\"delete-account-processor.php\" method=\"POST\">";
+  echo "<input type=\"hidden\" name=\"accountID\" id=\"confirmAccountDeleteID\" value=\"\"></input>";
+  echo "<header class=\"w3-container w3-light-green\">";
+  echo "<button  type=\"reset\" onclick=\"closeModal('confirmAccountDeleteModal')\" class=\"w3-button w3-display-topright\">&times;</button>";
+  echo "<h3>Delete Account</h3>";
+  echo "<h6>Note: only Accounts with a balance of " . moneyFormat(0, $_SESSION['currencyShort']) . " are elegible for deletion.</h6>";
+  echo "</header>";
+
+  echo "<div class=\"w3-container\">";
+  echo "Are you sure you want to delete the Account named: ";
+  echo "<label id=\"confirmAccountDeleteName\" style=\"font-weight:bold\"></label>? ";
+  echo "<BR><BR>Any <b>receipts</b> associated with this Account will also be <b>deleted</b> and cannot be recovered.";
+  echo " It is recommended to simply <b>deactivate</b> unused accounts.";
+  echo "</div>";
+
+  echo "<footer class=\"w3-container w3-light-green\">";
+  echo "<button type=\"reset\" class=\"w3-button\" onclick=\"closeModal('confirmAccountDeleteModal')\">Cancel</button>";
+  echo "<DIV class=\"w3-button\" onclick=\"deleteAccount()\">Delete</DIV>";
+  echo "</footer>";
+  echo "</form></div></div>";
+}//end printDeleteAccountModal()
+
 
 function printAddAccountModal(){
   $patternTxt = "^\d*([.]\d{1,2})?$";
@@ -88,10 +115,15 @@ function printAccountsTable(){
       $strToReturn .= "<td><input type=\"checkbox\" name=\"accountActive\" disabled/></td>";
     }
 
-    $strToReturn .= "<td><label title=\"edit\" class=\"material-icons\" onclick=\"editAccount($acctID)\">create</label></td>";
-    //$strToReturn .= "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDeleteAccount($acctID)\">delete</label></td>";
-    $strToReturn .= "</tr>";
+    $strToReturn .= "<td><label title=\"edit\" class=\"material-icons\" onclick=\"editAccount($acctID)\">create</label>";
+
+    if($acctBalance == 0){
+      $strToReturn .= "<label title=\"delete\" class=\"material-icons\" onclick=\"confirmDeleteAccount($acctID,'$acctName')\">delete</label></td></tr>";
+    }else{
+      $strToReturn .= "</td></tr>";
+    }
   }
+
   $strToReturn = $strToReturn . "</table></form>";
   $strToReturn = $strToReturn .  "</DIV>"; //end accounts_table
   return $strToReturn;
@@ -167,7 +199,7 @@ echo "</DIV></DIV>";
 
 //Placeholders for modal
 echo printAddAccountModal();
-echo "<div id=\"confirmAccountDeleteModal\" class=\"w3-modal\"></DIV>";
+echo printDeleteAccountModal();
 echo printAccountsTable();
 echo "</DIV>"; //end maincontent
 
