@@ -6,7 +6,7 @@ $earliestDateString = "";
 $earliestDateYear = "";
 $earliestDateMonth = "";
 
-$monthsArray = array('Zero Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 
+$monthsArray = array('Zero Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
     'September', 'October', 'November', 'December');
 
 
@@ -40,36 +40,36 @@ while ($tempYear <= $thisYear){
     echo "<option value=\"" . $tempYear . "\">" . $tempYear . "</option>";
     $tempYear ++;
 }
-    
+
 echo "</SELECT></DIV>";
 
 
-  
+
 //create months
 if($reportType == "2"){
     $tempMonth = (int)$earliestDateMonth;
     $tempYear = (int)$earliestDateYear;
     echo "<INPUT type=\"hidden\" id=\"reportMonth\" name=\"reportMonth\" value=\"0\"/>";
     do{
-        //echo "<DIV id=\"months" . $tempYear . "\" style=\"display:none\">";
-        echo "<select name=\"monthsOf" . $tempYear . "\" id=\"months" . $tempYear . "\" style=\"display:none\" " . 
+
+        echo "<select name=\"monthsOf" . $tempYear . "\" id=\"months" . $tempYear . "\" style=\"display:none\" " .
         "onchange=\"monthSelected(this.value)\">";
         echo "<option value=\"\" selected disabled>Select a month...</option>";
         while($tempMonth < 13){
-            if(($tempYear == $thisYear)&&($tempMonth>=$thisMonth)){
+            if(($tempYear == $thisYear) && ($tempMonth > $thisMonth)){
                 break;
-            }   
-            //echo $monthsArray[$tempMonth] . " " . $tempYear ."<BR>";
+            }
+            
             echo "<option value=\"" . $tempMonth . "\">" . $monthsArray[$tempMonth] . "</option>";
             $tempMonth++;
         }
         echo "</SELECT>";
-        //echo "</DIV>";
+
         $tempYear ++;
         $tempMonth = 1;
     }while ($tempYear <= $thisYear);
 }
-    
+
 
 //SUBMIT BUTTON
 echo "<INPUT type=\"submit\" value=\"GO\"/>";
